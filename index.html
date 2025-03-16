@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario de Inteligencia Emocional</title>
+    <script>
+        async function enviarRespuestas() {
+            let nombre = document.getElementById("nombre").value;
+            let correo = document.getElementById("correo").value;
+            let respuestas = [];
+            
+            document.querySelectorAll("input[type=radio]:checked").forEach((input) => {
+                respuestas.push(parseInt(input.value));
+            });
+            
+            let data = { nombre, correo, respuestas };
+            
+            let response = await fetch("/guardar_respuestas", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+            
+            let result = await response.json();
+            alert(result.mensaje + "\nPuntaje: " + result.puntaje);
+        }
+    </script>
+</head>
+<body>
+    <h1>Cuestionario de Inteligencia Emocional</h1>
+    <label>Nombre: <input type="text" id="nombre"></label><br>
+    <label>Correo: <input type="email" id="correo"></label><br>
+    
+    <h2>Preguntas</h2>
+    <p>1. ¿Cómo reaccionas ante situaciones de estrés?</p>
+    <label><input type="radio" name="p1" value="1"> Me paralizo</label>
+    <label><input type="radio" name="p1" value="2"> Me pongo ansioso</label>
+    <label><input type="radio" name="p1" value="3"> Mantengo la calma</label>
+    
+    <p>2. ¿Qué tan bien manejas tus emociones?</p>
+    <label><input type="radio" name="p2" value="1"> Muy mal</label>
+    <label><input type="radio" name="p2" value="2"> Regular</label>
+    <label><input type="radio" name="p2" value="3"> Muy bien</label>
+    
+    <br><br>
+    <button onclick="enviarRespuestas()">Enviar</button>
+</body>
+</html>
